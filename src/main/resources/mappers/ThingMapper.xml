@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace表示命名空间 -->
+<mapper namespace="com.demo.mappers.ThingMapper">
+	<!--根据客户编号获取客户信息 -->
+	<select id="findThingById" parameterType="Integer"
+			resultType="Thing">
+		select * from thing where id = #{id}
+	</select>
+
+	<!--根据客户名模糊查询客户信息列表-->
+	<select id="findThingByName" parameterType="String"
+			resultType="com.demo.po.Thing">
+ select * from thing where thingname like '%${value}%'
+
+	</select>
+	<select id="findAllThing" resultType="com.demo.po.Thing">
+		select * from thing
+	</select>
+	<!-- 添加客户信息 -->
+	<insert id="addThing" parameterType="com.demo.po.Thing">
+	    insert into thing(id,thingname,type)
+	    values(#{id},#{thingname},#{type})
+	</insert>
+
+	<!-- 更新客户信息 -->
+	<update id="updateThing" parameterType="com.demo.po.Thing">
+	    update thing set
+	    thingname=#{thingname},type=#{type}
+	    where id=#{id}
+	</update>
+
+	<!-- 删除客户信息 -->
+	<delete id="deleteThing" parameterType="Integer">
+	    delete from thing where id=#{id}
+	</delete>
+
+	<select id="findCustomerByNameAndJobs" parameterType="com.demo.po.Thing"
+			resultType="com.demo.po.Thing">
+		select * from thing where 1=1
+		<if test="thingname !=null and thingname !=''">
+			and thingname like concat('%',#{thingname},'%')
+		</if>
+		<if test="type !=null and type !=''">
+			and type= #{type}
+		</if>
+	</select>
+</mapper>
